@@ -13,6 +13,11 @@ public class WorkWithFile {
     private static final String COMMA = ",";
 
     public void getStatistic(String fromFileName, String toFileName) {
+        String report = getStatisticsFromFile(fromFileName);
+        writeStatisticsToFile(toFileName, report);
+    }
+
+    private String getStatisticsFromFile(String fromFileName) {
         StringBuilder report = new StringBuilder();
 
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(fromFileName))) {
@@ -35,12 +40,16 @@ public class WorkWithFile {
             report.append(SUPPLY).append(COMMA).append(supply).append(System.lineSeparator());
             report.append(BUY).append(COMMA).append(buy).append(System.lineSeparator());
             report.append(RESULT).append(COMMA).append(result);
+
+            return report.toString();
         } catch (IOException e) {
             throw new RuntimeException("Can't read file " + fromFileName, e);
         }
+    }
 
+    private void writeStatisticsToFile(String toFileName, String report) {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(toFileName))) {
-            bufferedWriter.write(report.toString());
+            bufferedWriter.write(report);
         } catch (IOException e) {
             throw new RuntimeException("Can't write to file " + toFileName, e);
         }
